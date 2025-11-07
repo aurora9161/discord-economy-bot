@@ -6,9 +6,9 @@
 ![Python](https://img.shields.io/badge/python-3.8+-yellow.svg)
 ![License](https://img.shields.io/badge/license-MIT-green.svg)
 
-A feature-rich Discord economy bot with slash commands, shop system, gambling games, and admin tools built with discord.py!
+A feature-rich Discord economy bot with **slash commands only**, shop system, gambling games, and admin tools!
 
-[Features](#-features) • [Installation](#-installation) • [Commands](#-commands) • [Setup](#-quick-setup)
+[Features](#-features) • [Quick Setup](#-quick-setup) • [Commands](#-commands) • [Customization](#%EF%B8%8F-customization)
 
 </div>
 
@@ -44,24 +44,15 @@ A feature-rich Discord economy bot with slash commands, shop system, gambling ga
 - **Help Command** - Comprehensive command reference
 
 ### 🎨 Modern Design
-- ✅ **Slash Commands Only** - Native Discord integration
+- ✅ **Slash Commands ONLY** - No prefix commands at all
+- ✅ **All Config in main.py** - No .env files needed
 - ✅ **Beautiful Embeds** - Rich, colorful command responses
 - ✅ **Emoji Integration** - Visual and engaging interface
-- ✅ **Error Handling** - User-friendly error messages
 - ✅ **Modular Cogs** - Clean, organized code structure
 
 ---
 
-## 📋 Requirements
-
-- **Python 3.8+**
-- **discord.py 2.3.0+**
-- **aiosqlite**
-- **python-dotenv**
-
----
-
-## 🚀 Installation
+## 🚀 Quick Setup
 
 ### 1. Clone Repository
 ```bash
@@ -74,7 +65,7 @@ cd discord-economy-bot
 pip install -r requirements.txt
 ```
 
-### 3. Create Discord Application
+### 3. Get Bot Token
 1. Go to [Discord Developer Portal](https://discord.com/developers/applications)
 2. Click "New Application" and name it
 3. Navigate to "Bot" tab and click "Add Bot"
@@ -83,17 +74,23 @@ pip install -r requirements.txt
    - ✅ Message Content Intent
 5. Click "Reset Token" and copy your bot token
 
-### 4. Configure Environment
-```bash
-# Copy the example env file
-cp .env.example .env
+### 4. Configure Bot
+Open `main.py` and edit the Config class at the top:
 
-# Edit .env and add your token
-DISCORD_TOKEN=your_bot_token_here
+```python
+class Config:
+    # REQUIRED: Add your bot token here
+    BOT_TOKEN = "YOUR_BOT_TOKEN_HERE"
+    
+    # Optional: Customize these settings
+    STATUS_MESSAGE = "your economy | /help"
+    DEFAULT_BANK_LIMIT = 5000
+    DAILY_BASE_REWARD = 500
+    # ... more settings
 ```
 
 ### 5. Invite Bot to Server
-1. Go to "OAuth2" → "URL Generator"
+1. Go to "OAuth2" → "URL Generator" in Developer Portal
 2. Select scopes: `bot` + `applications.commands`
 3. Select permissions:
    - ✅ Send Messages
@@ -108,16 +105,17 @@ python main.py
 ```
 
 **The bot will automatically:**
+- Validate your configuration
 - Create the SQLite database
 - Initialize shop items
 - Sync all slash commands
-- Display status when ready
+- Display ready status
 
 ---
 
 ## 📝 Commands
 
-### 💰 Economy Commands
+### 💰 Economy Commands (6)
 | Command | Description | Cooldown |
 |---------|-------------|----------|
 | `/balance [user]` | Check balance (wallet + bank) | None |
@@ -127,7 +125,7 @@ python main.py
 | `/withdraw <amount>` | Withdraw money from bank | None |
 | `/leaderboard` | View top 10 richest users | None |
 
-### 🏪 Shop Commands
+### 🏪 Shop Commands (4)
 | Command | Description |
 |---------|-------------|
 | `/shop` | View all available items |
@@ -135,7 +133,7 @@ python main.py
 | `/sell <item> [quantity]` | Sell item for 70% price |
 | `/inventory [user]` | View inventory |
 
-### 🎰 Gambling Commands
+### 🎰 Gambling Commands (4)
 | Command | Description | Multiplier |
 |---------|-------------|------------|
 | `/coinflip <bet> <choice>` | Bet on heads or tails | 2x |
@@ -143,7 +141,7 @@ python main.py
 | `/dice <bet> <guess>` | Guess the dice roll | 6x |
 | `/blackjack <bet>` | Play against dealer | 2x |
 
-### ⚙️ Admin Commands (Requires Administrator)
+### ⚙️ Admin Commands (6) - Requires Administrator
 | Command | Description |
 |---------|-------------|
 | `/addmoney <user> <amount>` | Add money to user wallet |
@@ -153,35 +151,45 @@ python main.py
 | `/econostats` | View server statistics |
 | `/help` | Show all commands |
 
+**Total: 20 slash commands** - Zero prefix commands!
+
 ---
 
-## 🎮 How to Play
+## 🛠️ Customization
 
-### Getting Started
-1. Use `/work` every hour to earn money
-2. Use `/daily` once per day for bigger rewards
-3. Build up your daily streak for bonus money!
+All configuration is in `main.py` in the `Config` class at the top of the file!
 
-### Making Money
-- **Work**: Earn $90-$500 per hour
-- **Daily**: Base $500 + streak bonus (up to $1,000)
-- **Gambling**: Risk money for big multipliers
+### Bot Token & Status
+```python
+BOT_TOKEN = "your_token_here"
+STATUS_TYPE = discord.ActivityType.watching
+STATUS_MESSAGE = "your economy | /help"
+```
 
-### Managing Money
-- Keep money in wallet for quick access
-- Store money in bank for safety (has limits)
-- Bank protects from gambling losses
+### Economy Settings
+```python
+DEFAULT_BANK_LIMIT = 5000
+DAILY_BASE_REWARD = 500
+DAILY_STREAK_BONUS = 50
+MAX_STREAK_BONUS = 1000
+WORK_COOLDOWN_HOURS = 1
+WORK_MIN_EARNINGS = 90
+WORK_MAX_EARNINGS = 500
+```
 
-### Shopping
-1. Check `/shop` for available items
-2. Use `/buy <item>` to purchase
-3. View collection with `/inventory`
-4. Sell items with `/sell <item>` for 70% back
+### Shop Items
+```python
+SHOP_ITEMS = [
+    ("item_name", price, "description", "emoji"),
+    ("sword", 1000, "A sharp sword ⚔️", "⚔️"),
+    # Add more items here!
+]
+```
 
-### Competing
-- Check `/leaderboard` to see rankings
-- Compete with friends for #1 spot
-- Track your total wealth (wallet + bank)
+### Sell Price
+```python
+SELL_PRICE_MULTIPLIER = 0.7  # 70% of original price
+```
 
 ---
 
@@ -189,93 +197,74 @@ python main.py
 
 ```
 discord-economy-bot/
-├── main.py                 # Bot entry point
+├── main.py                 # Bot + Config (edit this!)
 ├── requirements.txt        # Dependencies
-├── .env.example           # Environment template
-├── .gitignore            # Git ignore rules
-├── README.md             # This file
+├── .gitignore             # Git ignore rules
+├── README.md              # This file
 │
-├── cogs/                 # Command modules
+├── cogs/                  # Command modules
 │   ├── __init__.py
-│   ├── economy.py        # Economy commands
-│   ├── shop.py          # Shop & inventory
-│   ├── gambling.py      # Gambling games
-│   └── admin.py         # Admin commands
+│   ├── economy.py         # Economy commands
+│   ├── shop.py            # Shop & inventory
+│   ├── gambling.py        # Gambling games
+│   └── admin.py           # Admin commands
 │
-└── utils/               # Utilities
+└── utils/                 # Utilities
     ├── __init__.py
-    └── database.py      # Database handler
+    └── database.py        # Database handler
 ```
 
 ---
 
-## 🛠️ Customization
+## 🎮 How to Play
 
-### Adding Shop Items
-Edit `cogs/shop.py` → `DEFAULT_ITEMS`:
-```python
-DEFAULT_ITEMS = [
-    ("item_name", price, "Description", "emoji"),
-    ("sword", 1000, "A sharp sword ⚔️", "⚔️"),
-    # Add more...
-]
-```
+### Getting Started
+1. Use `/work` every hour to earn money ($90-$500)
+2. Use `/daily` once per day for bigger rewards ($500+)
+3. Build up your daily streak for bonus money (up to $1,000)!
 
-### Changing Reward Amounts
-**Daily Rewards** (`cogs/economy.py`):
-```python
-base_reward = 500  # Change base amount
-streak_bonus = min(streak * 50, 1000)  # Change bonus calculation
-```
+### Managing Money
+- Keep money in **wallet** for quick access
+- Store money in **bank** for safety (protected from gambling losses)
+- Bank has limits - use `/deposit` and `/withdraw`
 
-**Work Rewards** (`cogs/economy.py`):
-```python
-jobs = [
-    ("job_name", min_earnings, max_earnings),
-    # Modify existing or add new jobs
-]
-```
+### Shopping
+1. Check `/shop` to see all items
+2. Use `/buy <item>` to purchase
+3. Use `/inventory` to see what you own
+4. Sell items with `/sell <item>` for 70% back
 
-### Adjusting Bank Limits
-**Default Limit** (`utils/database.py`):
-```python
-bank_limit INTEGER DEFAULT 5000  # Change default limit
-```
+### Gambling
+- Risk your money for big multipliers!
+- **Coinflip**: 50/50 chance, 2x payout
+- **Slots**: Match 3 for up to 10x jackpot
+- **Dice**: Guess right for 6x payout
+- **Blackjack**: Beat the dealer for 2x
 
-**Per-User Limits**: Use `/setbank <user> <limit>` command
-
-### Adding New Gambling Games
-Create new command in `cogs/gambling.py`:
-```python
-@app_commands.command(name="newgame", description="Your game")
-async def newgame(self, interaction: discord.Interaction, bet: int):
-    # Your game logic
-    pass
-```
+### Competing
+- Check `/leaderboard` to see who's richest
+- Your rank is based on total wealth (wallet + bank)
+- Compete with friends for #1!
 
 ---
 
 ## 🐛 Troubleshooting
 
-### Bot doesn't respond to slash commands
-- Wait 5-10 minutes for Discord to sync commands
-- Make sure bot has proper permissions
-- Check that intents are enabled in Developer Portal
+### Bot doesn't start
+- Check that `BOT_TOKEN` is set correctly in `main.py`
+- Make sure you're using a valid bot token
+- Verify all dependencies are installed
 
-### "DISCORD_TOKEN not found" error
-- Ensure `.env` file exists (not `.env.example`)
-- Check token is correctly pasted
-- No quotes needed around token
+### Slash commands don't appear
+- Wait 5-10 minutes for Discord to sync commands
+- Reinvite bot with `applications.commands` scope
+- Check bot has proper server permissions
+- Verify intents are enabled in Developer Portal
 
 ### Database errors
-- Delete `economy.db` file
-- Restart bot to recreate database
+- Delete `economy.db` file and restart bot
 - Check write permissions in directory
-
-### Commands not appearing
-- Reinvite bot with `applications.commands` scope
-- Wait for command sync to complete
-- Check bot has proper server permissions
+- Make sure aiosqlite is installed
 
 ---
 
@@ -288,53 +277,36 @@ async def newgame(self, interaction: discord.Interaction, bet: int):
 - 📈 Check leaderboard to track progress
 
 ### For Admins
-- 📊 Use `/econostats` to monitor economy
-- 🏦 Adjust bank limits for balance
+- 📊 Use `/econostats` to monitor economy health
+- 🏦 Adjust bank limits in Config for balance
 - 💰 Be careful with `/addmoney` to avoid inflation
 - 🔄 Use `/resetuser` sparingly
 
 ### For Developers
-- 📦 Cogs are modular - easy to add/remove
+- 📦 All config is in main.py Config class
 - 🗄️ Database is SQLite - simple and portable
 - 🎨 Embeds follow consistent color scheme
-- ✅ Error handling is built-in
+- ✅ No prefix commands - slash only!
+- 🔧 Cogs are modular - easy to modify
 
 ---
 
-## 📊 Database Schema
+## 📊 Key Features
 
-### Users Table
-```sql
-user_id (PK)      - Discord user ID
-balance           - Wallet money
-bank              - Bank money
-bank_limit        - Max bank capacity
-daily_streak      - Consecutive daily claims
-last_daily        - Last daily claim timestamp
-last_work         - Last work timestamp
-total_earned      - Lifetime earnings
-total_spent       - Lifetime spending
-```
-
-### Inventory Table
-```sql
-user_id, item_name (PK) - User + item combo
-quantity                - Number owned
-```
-
-### Shop Items Table
-```sql
-item_name (PK) - Item identifier
-price          - Purchase cost
-description    - Item description
-emoji          - Display emoji
-```
+✅ **Slash Commands Only** - No prefix command processing  
+✅ **Config in main.py** - No .env files needed  
+✅ **Modular Cogs** - Easy to extend and customize  
+✅ **SQLite Database** - Persistent data storage  
+✅ **Beautiful Embeds** - Rich Discord UI  
+✅ **Cooldown System** - Prevents spam  
+✅ **Permission Checks** - Admin commands protected  
+✅ **Error Handling** - User-friendly messages  
 
 ---
 
 ## 🤝 Contributing
 
-Contributions are welcome! Feel free to:
+Contributions welcome! Feel free to:
 - 🐛 Report bugs
 - 💡 Suggest features
 - 🔧 Submit pull requests
@@ -344,7 +316,7 @@ Contributions are welcome! Feel free to:
 
 ## 📋 License
 
-This project is open source and available for free use and modification.
+This project is open source and free to use/modify.
 
 ---
 
@@ -353,17 +325,6 @@ This project is open source and available for free use and modification.
 Built with ❤️ using:
 - [discord.py](https://github.com/Rapptz/discord.py)
 - [aiosqlite](https://github.com/omnilib/aiosqlite)
-- [python-dotenv](https://github.com/theskumar/python-dotenv)
-
----
-
-## 📞 Support
-
-Need help? Here's what to do:
-1. ✅ Read this README carefully
-2. ✅ Check the troubleshooting section
-3. ✅ Verify all dependencies are installed
-4. ✅ Ensure bot token and permissions are correct
 
 ---
 
@@ -371,7 +332,7 @@ Need help? Here's what to do:
 
 **Enjoy your economy bot!** 🎉
 
-Made for Discord servers | Perfect for community engagement
+**Slash Commands Only** | **Config in main.py** | **No .env Required**
 
 [⬆ Back to Top](#-discord-economy-bot)
 
